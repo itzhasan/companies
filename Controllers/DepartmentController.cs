@@ -20,8 +20,8 @@ namespace Company.Controllers
         public async Task<IActionResult> GetAll()
         {
             var department = await _departmentRepo.GetAllAsync();
-            var companyDto = department.Select(s => s.ToDepartmentDto());
-            return Ok(department);
+            var departmentDto = department.Select(s => s.ToDepartmentDto());
+            return Ok(departmentDto);
         }
 
         [HttpGet("{id}")]

@@ -24,6 +24,7 @@ builder.Services.AddDbContext<ApplicationDBContext>(options =>
 
 builder.Services.AddScoped<ICompanyRepository , CompanyRepository>();
 builder.Services.AddScoped<IDepartmentRepository, DepartmentRepository>();
+builder.Services.AddScoped<IEmployRepository, EmployRepository>();
 
 
 var app = builder.Build();

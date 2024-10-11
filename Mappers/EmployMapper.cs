@@ -17,9 +17,9 @@ namespace Company.Mappers
             };
         }
 
-        public static Employ ToEmployFormCreateDTO(this CreateEmployRequestDto employDto){
+        public static Employ ToEmployFormCreateDTO(this CreateEmployRequestDto employDto , int departmentId){
             return new Employ{
-                DepartmentId = employDto.DepartmentId,
+                DepartmentId = departmentId,
                 Name = employDto.Name,
                 Age = employDto.Age,
             };
