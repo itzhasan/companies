@@ -15,6 +15,5 @@ namespace Company.Interfaces
         Task<Department?> UpdateAsync(int id, UpdateDepartmentRequestDto departmentDto);
         Task<Department?> DeleteAsync(int id);
         Task<bool> DepartmentExists(int id);
-
     }
 }

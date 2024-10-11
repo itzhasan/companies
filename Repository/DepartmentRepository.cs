@@ -10,7 +10,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Company.Repository
 {
-    public class DepartmentRepository(ApplicationDBContext context) : IDepartmentRepository
+    public class DepartmentRepository(ApplicationDBContext context) : IDepartmentRepository 
     {
         private readonly ApplicationDBContext _context = context;
 
