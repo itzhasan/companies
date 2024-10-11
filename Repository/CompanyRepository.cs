@@ -41,6 +41,11 @@ namespace Company.Repository
             return await _context.Companies.Include(c => c.Departments).FirstOrDefaultAsync(i => i.Id == id);
         }
 
+        public Task<bool> CompanyExists(int id)
+        {
+            return _context.Companies.AnyAsync(s => s.Id == id);
+        }
+
         public async Task<Models.Company?> UpdateAsync(int id, UpdateCompanyRequestDto companyDto)
         {
             var existingCompany = await _context.Companies.FirstOrDefaultAsync(x => x.Id == id);

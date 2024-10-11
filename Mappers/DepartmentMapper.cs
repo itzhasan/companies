@@ -12,11 +12,19 @@ namespace Company.Mappers
         public static DepartmentDto ToDepartmentDto(this Department departmentModel){
             return new DepartmentDto{
                 Id = departmentModel.Id,
+                CompanyId = departmentModel.CompanyId,
                 Name = departmentModel.Name,
                 Type = departmentModel.Type,
-               // Departments = departmentModel.Departments.Select(c => c.ToDepartmentDto()).ToList()
+                Employs = departmentModel.Employs.Select(c => c.ToEmployDto()).ToList()
+            };
+
+        }
+        public static Department ToDepartmentFormCreateDTO(this CreateDepartmentRequestDto departmentDto ,int companyId){
+            return new Department{
+                CompanyId = companyId,
+                Name = departmentDto.Name,
+                Type = departmentDto.Type,
             };
         }
-        
     }
 }

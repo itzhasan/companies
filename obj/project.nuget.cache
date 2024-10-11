@@ -1,6 +1,6 @@
 {
   "version": 2,
-  "dgSpecHash": "hBLHD/7ylTRDt9zmmDerh+AFpB3VsoyaQxK+1Lx1DFOYaHvMKGBnUNbTUo9/Athy2hKMRItfYMLQfKSCdB/MhQ==",
+  "dgSpecHash": "0v8M6aa2bzB2+mOW5HkuAacMJ0SvZJFrjyjfQ6Xp9FZ8gyrWrYO1DyR76BWiJJrVzDRyL7PGQN3brmQeNMk+9Q==",
   "success": true,
   "projectFilePath": "C:\\C#\\Company\\Company.csproj",
   "expectedPackageFiles": [
@@ -59,6 +59,7 @@
     "C:\\Users\\nass1\\.nuget\\packages\\swashbuckle.aspnetcore.swaggerui\\6.4.0\\swashbuckle.aspnetcore.swaggerui.6.4.0.nupkg.sha512",
     "C:\\Users\\nass1\\.nuget\\packages\\system.codedom\\4.4.0\\system.codedom.4.4.0.nupkg.sha512",
     "C:\\Users\\nass1\\.nuget\\packages\\system.collections.immutable\\6.0.0\\system.collections.immutable.6.0.0.nupkg.sha512",
+    "C:\\Users\\nass1\\.nuget\\packages\\system.componentmodel.annotations\\5.0.0\\system.componentmodel.annotations.5.0.0.nupkg.sha512",
     "C:\\Users\\nass1\\.nuget\\packages\\system.composition\\6.0.0\\system.composition.6.0.0.nupkg.sha512",
     "C:\\Users\\nass1\\.nuget\\packages\\system.composition.attributedmodel\\6.0.0\\system.composition.attributedmodel.6.0.0.nupkg.sha512",
     "C:\\Users\\nass1\\.nuget\\packages\\system.composition.convention\\6.0.0\\system.composition.convention.6.0.0.nupkg.sha512",

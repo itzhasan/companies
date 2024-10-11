@@ -13,5 +13,6 @@ namespace Company.Interfaces
         Task<Company.Models.Company> CreateAsync(Company.Models.Company companyModel);
         Task<Company.Models.Company?> UpdateAsync(int id, UpdateCompanyRequestDto companyDto);
         Task<Company.Models.Company?> DeleteAsync(int id);
+        Task<bool> CompanyExists(int id);
     }
 }

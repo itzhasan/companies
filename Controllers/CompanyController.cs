@@ -39,7 +39,7 @@ namespace Company.Controllers
         [HttpPost]
         public async Task<IActionResult> Create([FromBody] CreateCompanyRequestDto companyDto)
         {
-            var companyModel = companyDto.ToStockFormCreateDTO();
+            var companyModel = companyDto.ToDepartmentFormCreateDTO();
             await _companyRepo.CreateAsync(companyModel);
             return CreatedAtAction(nameof(GetById), new { id = companyModel.Id }, companyModel.ToCompanyDto());
         }

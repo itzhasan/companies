@@ -16,7 +16,7 @@ namespace Company.Mappers
                 Departments = companyModel.Departments.Select(c => c.ToDepartmentDto()).ToList()
             };
         }
-        public static Company.Models.Company ToStockFormCreateDTO(this CreateCompanyRequestDto companyDto){
+        public static Company.Models.Company ToDepartmentFormCreateDTO(this CreateCompanyRequestDto companyDto){
             return new Company.Models.Company{
                 Name = companyDto.Name,
                 Type = companyDto.Type,

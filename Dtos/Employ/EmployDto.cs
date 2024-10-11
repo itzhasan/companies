@@ -3,14 +3,13 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace Company.Models
+namespace Company.Dtos.Employ
 {
-    public class Company
+    public class EmployDto
     {
         public int Id { get; set; }
+        public int DepartmentId {get; set;}
         public string Name { get; set; } = string.Empty;
-        public string Type {get; set;} = string.Empty;
-        public List<Department> Departments { get; set; } = [];
+        public int Age {get; set;}
     }
-    
 }

@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Company.Models;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
 namespace Company.Data
 {
@@ -27,6 +28,10 @@ namespace Company.Data
                 .HasMany(s => s.Departments)
                 .WithOne(c => c.Company)
                 .HasForeignKey(c => c.CompanyId);
+
+            modelBuilder.Entity<Company.Models.Company>()
+                .HasIndex(u => u.Name)
+                .IsUnique();
 
             modelBuilder.Entity<Department>()
                 .HasMany(s => s.Employs)
