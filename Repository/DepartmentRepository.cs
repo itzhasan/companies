@@ -33,6 +33,11 @@ namespace Company.Repository
             return departmentModel;
         }
 
+        public Task<bool> DepartmentExists(int id)
+        {
+            return _context.Departments.AnyAsync(s => s.Id == id);
+        }
+
         public async Task<List<Department>> GetAllAsync()
         {
             return await _context.Departments.ToListAsync();

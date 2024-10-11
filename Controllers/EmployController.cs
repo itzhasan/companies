@@ -11,9 +11,10 @@ namespace Company.Controllers
 {
     [Route("api/employ")]
     [ApiController]
-    public class EmployController(IEmployRepository employRepo) : ControllerBase
+    public class EmployController(IEmployRepository employRepo ,IDepartmentRepository departmentRepo) : ControllerBase
     {
         private readonly IEmployRepository _employRepo = employRepo;
+        private readonly IDepartmentRepository _departmentRepo = departmentRepo;
 
         [HttpGet]
         public async Task<IActionResult> GetAll()
@@ -34,16 +35,15 @@ namespace Company.Controllers
             return Ok(employ.ToEmployDto());
         }
 
-        [HttpPost("{companyId}")]
+        [HttpPost("{departmentId}")]
         public async Task<IActionResult> Create([FromRoute] int departmentId, CreateEmployRequestDto employDto)
         {
-            // if(!await _employRepo.CompanyExists(companyId)){
-            //     return BadRequest("company not exist");
-            // }
+            if(!await _departmentRepo.DepartmentExists(departmentId)){
+                return BadRequest("department not exist");
+            }
             var employModel = employDto.ToEmployFormCreateDTO(departmentId);
             await _employRepo.CreateAsync(employModel);
             return CreatedAtAction(nameof(GetById), new { id = employModel.Id }, employModel.ToEmployDto());
-            //return Ok("ok");
         }
 
         [HttpPut]
