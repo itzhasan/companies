@@ -27,6 +27,7 @@ builder.Services.AddScoped<ICompanyRepository , CompanyRepository>();
 builder.Services.AddScoped<IDepartmentRepository, DepartmentRepository>();
 builder.Services.AddScoped<IEmployRepository, EmployRepository>();
 builder.Services.AddTransient<ITransfereDepartmentService, TransfereDepartmentService>();
+builder.Services.AddTransient<ITransfereEmployService, TransfereEmployService>();
 
 
 

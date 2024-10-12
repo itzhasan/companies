@@ -7,7 +7,7 @@ using Company.Models;
 
 namespace Company.Mappers
 {
-    public static class EmployMapper
+    public static class EmployMapper //use record instead of class ( google class vs record)
     {
         public static EmployDto ToEmployDto(this Employ employModel){
             return new EmployDto{

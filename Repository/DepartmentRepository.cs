@@ -40,12 +40,12 @@ namespace Company.Repository
 
         public async Task<List<Department>> GetAllAsync()
         {
-            return await _context.Departments.ToListAsync();
+            return await _context.Departments.Include(c => c.Employs).ToListAsync();
         }
 
         public async Task<Department?> GetByIdAsync(int id)
         {
-            return await _context.Departments.FirstOrDefaultAsync(i => i.Id == id);
+            return await _context.Departments.Include(c => c.Employs).FirstOrDefaultAsync(i => i.Id == id);
         }
 
         public async Task<Department?> UpdateAsync(int id, UpdateDepartmentRequestDto departmentDto)
