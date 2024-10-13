@@ -1,67 +1,64 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Company.Data;
 using Company.Dtos.Company;
-using Company.Dtos.Department;
 using Company.Interfaces;
 using Company.Mappers;
 using Microsoft.AspNetCore.Mvc;
 
-namespace Company.Controllers
+namespace Company.Controllers;
+
+[Route("api/company")]
+[ApiController]
+public class CompanyController(ICompanyRepository companyRepository) : ControllerBase
 {
-    [Route("api/company")]
-    [ApiController]
-    public class CompanyController(ICompanyRepository companyRepository) : ControllerBase
+    private readonly ICompanyRepository _companyRepo = companyRepository;
+
+    [HttpGet]
+    public async Task<IActionResult> GetAll()
     {
-        private readonly ICompanyRepository _companyRepo = companyRepository;
+        var company = await _companyRepo.GetAllAsync();
+        var companyDto = company.Select(s => s.ToCompanyDto());
+        return Ok(company);
+    }
 
-        [HttpGet]
-        public async Task<IActionResult> GetAll()
+    [HttpGet("{id:int}")]
+    public async Task<IActionResult> GetById([FromRoute] int id)
+    {
+        var company = await _companyRepo.GetByIdAsync(id);
+        if (company == null)
         {
-            var company = await _companyRepo.GetAllAsync();
-            var companyDto = company.Select(s => s.ToCompanyDto());
-            return Ok(company);
+            return NotFound();
         }
+        return Ok(company.ToCompanyDto());
+    }
 
-        [HttpGet("{id}")]
-        public async Task<IActionResult> GetById([FromRoute] int id)
+    [HttpPost]
+    public async Task<IActionResult> Create([FromBody] CreateCompanyRequestDto companyDto)
+    {
+        var companyModel = companyDto.ToDepartmentFormCreateDTO();
+        await _companyRepo.CreateAsync(companyModel);
+        return CreatedAtAction(nameof(GetById), new { id = companyModel.Id }, companyModel.ToCompanyDto());
+    }
+
+    [HttpPut]
+    [Route("{id:int}")]
+    public async Task<IActionResult> Update([FromRoute] int id, [FromBody] UpdateCompanyRequestDto updateDto)
+    {
+        var companyModel = await _companyRepo.UpdateAsync(id, updateDto);
+        if (companyModel == null)
         {
-            var company = await _companyRepo.GetByIdAsync(id);
-            if (company == null)
-            {
-                return NotFound();
-            }
-            return Ok(company.ToCompanyDto());
+            return NotFound();
         }
+        return Ok(companyModel.ToCompanyDto());
+    }
 
-        [HttpPost]
-        public async Task<IActionResult> Create([FromBody] CreateCompanyRequestDto companyDto)
+    [HttpDelete]
+    [Route("{id:int}")]
+    public async Task<IActionResult> Delete([FromRoute] int id)
+    {
+        var companyModel = await _companyRepo.DeleteAsync(id);
+        if (companyModel == null)
         {
-            var companyModel = companyDto.ToDepartmentFormCreateDTO();
-            await _companyRepo.CreateAsync(companyModel);
-            return CreatedAtAction(nameof(GetById), new { id = companyModel.Id }, companyModel.ToCompanyDto());
+            return NotFound();
         }
-
-        [HttpPut]
-        [Route("{id}")]
-        public async Task<IActionResult> Update([FromRoute] int id,[FromBody] UpdateCompanyRequestDto updateDto){
-            var companyModel = await _companyRepo.UpdateAsync(id ,updateDto);
-            if(companyModel == null){
-                return NotFound();
-            }
-            return Ok(companyModel.ToCompanyDto());
-        }
-
-        [HttpDelete]
-        [Route("{id}")]
-        public async Task<IActionResult> Delete([FromRoute] int id){
-            var companyModel = await _companyRepo.DeleteAsync(id);
-            if(companyModel == null){
-                return NotFound();
-            }
-            return Ok("deleted");
-        }
+        return Ok("deleted");
     }
 }

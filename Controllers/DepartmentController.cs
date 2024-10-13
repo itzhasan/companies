@@ -1,86 +1,79 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 using Company.Dtos.Department;
-using Company.Dtos.TansfereDepartmentDto;
+using Company.Dtos.TransferDepartmentDto;
 using Company.Interfaces;
 using Company.Mappers;
-using Company.Services;
 using Microsoft.AspNetCore.Mvc;
 
-namespace Company.Controllers
+namespace Company.Controllers;
+[Route("api/department")]
+[ApiController]
+public class DepartmentController(IDepartmentRepository departmentRepo, ICompanyRepository companyRepo, ITransferDepartmentService transferDepartment) : ControllerBase
 {
-    [Route("api/department")]
-    [ApiController]
-    public class DepartmentController(IDepartmentRepository departmentRepo, ICompanyRepository companyRepo, ITransfereDepartmentService transfereDepartment) : ControllerBase
+    private readonly IDepartmentRepository _departmentRepo = departmentRepo;
+    private readonly ICompanyRepository _companyRepo = companyRepo;
+    private readonly ITransferDepartmentService _transfer = transferDepartment;
+
+    [HttpGet]
+    public async Task<IActionResult> GetAll()
     {
-        private readonly IDepartmentRepository _departmentRepo = departmentRepo;
-        private readonly ICompanyRepository _companyRepo = companyRepo;
-        private readonly ITransfereDepartmentService _transfere = transfereDepartment;
+        var department = await _departmentRepo.GetAllAsync();
+        var departmentDto = department.Select(s => s.ToDepartmentDto());
+        return Ok(departmentDto);
+    }
 
-        [HttpGet]
-        public async Task<IActionResult> GetAll()
+    [HttpGet("{id:int}")]
+    public async Task<IActionResult> GetById([FromRoute] int id)
+    {
+        var department = await _departmentRepo.GetByIdAsync(id);
+        if (department == null)
         {
-            var department = await _departmentRepo.GetAllAsync();
-            var departmentDto = department.Select(s => s.ToDepartmentDto());
-            return Ok(departmentDto);
+            return NotFound();
         }
+        return Ok(department.ToDepartmentDto());
+    }
 
-        [HttpGet("{id}")]
-        public async Task<IActionResult> GetById([FromRoute] int id)
+    [HttpPost("{companyId:int}")]
+    public async Task<IActionResult> Create([FromRoute] int companyId, CreateDepartmentRequestDto departmentDto)
+    {
+        if (!await _companyRepo.CompanyExists(companyId))
         {
-            var department = await _departmentRepo.GetByIdAsync(id);
-            if (department == null)
-            {
-                return NotFound();
-            }
-            return Ok(department.ToDepartmentDto());
+            return BadRequest("company not exist");
         }
+        var departmentModel = departmentDto.ToDepartmentFormCreateDTO(companyId);
+        await _departmentRepo.CreateAsync(departmentModel);
+        return CreatedAtAction(nameof(GetById), new { id = departmentModel.Id }, departmentModel.ToDepartmentDto());
+        //return Ok("ok");
+    }
 
-        [HttpPost("{companyId}")]
-        public async Task<IActionResult> Create([FromRoute] int companyId, CreateDepartmentRequestDto departmentDto)
+    [HttpPut]
+    [Route("{id:int}")]
+    public async Task<IActionResult> Update([FromRoute] int id, [FromBody] UpdateDepartmentRequestDto updateDto)
+    {
+        var departmentModel = await _departmentRepo.UpdateAsync(id, updateDto);
+        if (departmentModel == null)
         {
-            if (!await _companyRepo.CompanyExists(companyId))
-            {
-                return BadRequest("company not exist");
-            }
-            var departmentModel = departmentDto.ToDepartmentFormCreateDTO(companyId);
-            await _departmentRepo.CreateAsync(departmentModel);
-            return CreatedAtAction(nameof(GetById), new { id = departmentModel.Id }, departmentModel.ToDepartmentDto());
-            //return Ok("ok");
+            return NotFound();
         }
+        return Ok(departmentModel.ToDepartmentDto());
+    }
 
-        [HttpPut]
-        [Route("{id}")]
-        public async Task<IActionResult> Update([FromRoute] int id, [FromBody] UpdateDepartmentRequestDto updateDto)
+    [HttpDelete]
+    [Route("{id:int}")]
+    public async Task<IActionResult> Delete([FromRoute] int id)
+    {
+        var departmentModel = await _departmentRepo.DeleteAsync(id);
+        if (departmentModel == null)
         {
-            var departmentModel = await _departmentRepo.UpdateAsync(id, updateDto);
-            if (departmentModel == null)
-            {
-                return NotFound();
-            }
-            return Ok(departmentModel.ToDepartmentDto());
+            return NotFound();
         }
+        return Ok("deleted");
+    }
 
-        [HttpDelete]
-        [Route("{id}")]
-        public async Task<IActionResult> Delete([FromRoute] int id)
-        {
-            var departmentModel = await _departmentRepo.DeleteAsync(id);
-            if (departmentModel == null)
-            {
-                return NotFound();
-            }
-            return Ok("deleted");
-        }
-
-        [HttpPost]
-        [Route("transfer")]
-        public async Task<IActionResult> Transfere([FromBody] TransfereDepartmentDto transfereDepartmentDto)
-        {
-             await _transfere.MoveDepartmentToAnotherCompanyAsync(transfereDepartmentDto);
-            return Ok("ok");
-        }
+    [HttpPost]
+    [Route("transfer")]
+    public async Task<IActionResult> Transfer([FromBody] TransferDepartmentDto transferDepartmentDto)
+    {
+        await _transfer.MoveDepartmentToAnotherCompanyAsync(transferDepartmentDto);
+        return Ok("ok");
     }
 }

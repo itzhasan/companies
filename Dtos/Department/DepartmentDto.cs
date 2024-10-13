@@ -1,17 +1,11 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Company.Dtos.Employ;
+using Company.Dtos.Employee;
 
-namespace Company.Dtos.Department
+namespace Company.Dtos.Department;
+public class DepartmentDto
 {
-    public class DepartmentDto
-    {
-        public int Id { get; set; }
-        public int CompanyId {get; set;}
-        public string Name { get; set; } = string.Empty;
-        public string Type {get; set;} = string.Empty;
-        public List<EmployDto> Employs { get; set; } = [];
-    }
+    public int Id { get; set; }
+    public int CompanyId { get; set; }
+    public string Name { get; set; } = string.Empty;
+    public string Type { get; set; } = string.Empty;
+    public List<EmployeeDto> Employees { get; set; } = [];
 }

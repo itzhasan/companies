@@ -68,7 +68,7 @@ namespace Company.Migrations
                     b.ToTable("Departments");
                 });
 
-            modelBuilder.Entity("Company.Models.Employ", b =>
+            modelBuilder.Entity("Company.Models.Employee", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -90,7 +90,7 @@ namespace Company.Migrations
 
                     b.HasIndex("DepartmentId");
 
-                    b.ToTable("Employs");
+                    b.ToTable("Employees");
                 });
 
             modelBuilder.Entity("Company.Models.Department", b =>
@@ -104,10 +104,10 @@ namespace Company.Migrations
                     b.Navigation("Company");
                 });
 
-            modelBuilder.Entity("Company.Models.Employ", b =>
+            modelBuilder.Entity("Company.Models.Employee", b =>
                 {
                     b.HasOne("Company.Models.Department", "Department")
-                        .WithMany("Employs")
+                        .WithMany("Employees")
                         .HasForeignKey("DepartmentId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -122,7 +122,7 @@ namespace Company.Migrations
 
             modelBuilder.Entity("Company.Models.Department", b =>
                 {
-                    b.Navigation("Employs");
+                    b.Navigation("Employees");
                 });
 #pragma warning restore 612, 618
         }

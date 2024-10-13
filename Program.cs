@@ -1,7 +1,4 @@
 using Microsoft.EntityFrameworkCore;
-using Newtonsoft.Json;
-using Microsoft.Extensions.Options;
-using Microsoft.AspNetCore.Mvc.NewtonsoftJson;
 using Company.Data;
 using Company.Interfaces;
 using Company.Repository;
@@ -25,9 +22,9 @@ builder.Services.AddDbContext<ApplicationDBContext>(options =>
 
 builder.Services.AddScoped<ICompanyRepository , CompanyRepository>();
 builder.Services.AddScoped<IDepartmentRepository, DepartmentRepository>();
-builder.Services.AddScoped<IEmployRepository, EmployRepository>();
-builder.Services.AddTransient<ITransfereDepartmentService, TransfereDepartmentService>();
-builder.Services.AddTransient<ITransfereEmployService, TransfereEmployService>();
+builder.Services.AddScoped<IEmployeeRepository, EmployeeRepository>();
+builder.Services.AddTransient<ITransferDepartmentService, TransferDepartmentService>();
+builder.Services.AddTransient<ITransferEmployeeService, TransferEmployeeService>();
 
 
 

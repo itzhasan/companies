@@ -1,5 +1,5 @@
-using Company.Dtos.Employ;
-using Company.Dtos.TransfereEmployDto;
+using Company.Dtos.Employee;
+using Company.Dtos.TransferEmployDto;
 using Company.Interfaces;
 using Company.Mappers;
 using Microsoft.AspNetCore.Mvc;
@@ -8,60 +8,60 @@ namespace Company.Controllers;
 
 [Route("api/employee")]
 [ApiController]
-public class EmployeeController(IEmployRepository employRepo, IDepartmentRepository departmentRepo, ITransfereEmployService transfereEmployService) : ControllerBase
+public class EmployeeController(IEmployeeRepository employeeRepo, IDepartmentRepository departmentRepo, ITransferEmployeeService transferEmployService) : ControllerBase
 {
-    private readonly IEmployRepository _employRepo = employRepo;
+    private readonly IEmployeeRepository _employeeRepo = employeeRepo;
     private readonly IDepartmentRepository _departmentRepo = departmentRepo;
-    private readonly ITransfereEmployService _transfereEmployService = transfereEmployService;
+    private readonly ITransferEmployeeService _transferEmployeeService = transferEmployService;
 
     [HttpGet]
     public async Task<IActionResult> GetAll()//add paginating
     {
-        var employs = await _employRepo.GetAllAsync();
-        var employDto = employs.Select(s => s.ToEmployDto());
+        var employs = await _employeeRepo.GetAllAsync();
+        var employDto = employs.Select(s => s.ToEmployeeDto());
         return Ok(employs);
     }
 
     [HttpGet("{id:int}")]
     public async Task<IActionResult> GetById(int id)
     {
-        var employ = await _employRepo.GetByIdAsync(id);
-        if (employ == null) // error handling
+        var employee = await _employeeRepo.GetByIdAsync(id);
+        if (employee == null) // error handling
         {
             return NotFound();
         }
-        return Ok(employ.ToEmployDto());
+        return Ok(employee.ToEmployeeDto());
     }
 
     [HttpPost("{departmentId:int}")]
-    public async Task<IActionResult> Create(int departmentId, CreateEmployRequestDto employDto)
+    public async Task<IActionResult> Create(int departmentId, CreateEmployeeRequestDto employeeDto)
     {
         if (!await _departmentRepo.DepartmentExists(departmentId))
         {
             return BadRequest("department not exist");
         }
-        var employModel = employDto.ToEmployFormCreateDTO(departmentId);
-        await _employRepo.CreateAsync(employModel);
-        return CreatedAtAction(nameof(GetById), new { id = employModel.Id }, employModel.ToEmployDto());
+        var employModel = employeeDto.ToEmployeeFormCreateDTO(departmentId);
+        await _employeeRepo.CreateAsync(employModel);
+        return CreatedAtAction(nameof(GetById), new { id = employModel.Id }, employModel.ToEmployeeDto());
     }
 
     [HttpPut]
     [Route("{id:int}")]
-    public async Task<IActionResult> Put(int id, [FromBody] UpdateEmployRequestDto updateDto)
+    public async Task<IActionResult> Put(int id, [FromBody] UpdateEmployeeRequestDto updateDto)
     {
-        var employModel = await _employRepo.UpdateAsync(id, updateDto);
+        var employModel = await _employeeRepo.UpdateAsync(id, updateDto);
         if (employModel == null)
         {
             return NotFound();
         }
-        return Ok(employModel.ToEmployDto());
+        return Ok(employModel.ToEmployeeDto());
     }
 
     [HttpDelete]
     [Route("{id:int}")]
     public async Task<IActionResult> Delete(int id)
     {
-        var employModel = await _employRepo.DeleteAsync(id);
+        var employModel = await _employeeRepo.DeleteAsync(id);
         if (employModel == null)
         {
             return NotFound();
@@ -70,9 +70,9 @@ public class EmployeeController(IEmployRepository employRepo, IDepartmentReposit
     }
     [HttpPost]
         [Route("transfer")]
-        public async Task<IActionResult> Transfere([FromBody] TransferEmployDto transferEmployDto)
+        public async Task<IActionResult> Transfer([FromBody] TransferEmployeeDto transferEmployeeDto)
         {
-            await _transfereEmployService.MoveEmployToAnotherDepartmentAsync(transferEmployDto);
+            await _transferEmployeeService.MoveEmployeeToAnotherDepartmentAsync(transferEmployeeDto);
             return Ok("ok");
         }
 }
