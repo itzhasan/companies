@@ -1,5 +1,6 @@
 using Company.Data;
 using Company.Dtos.Company;
+using Company.Helpers;
 using Company.Interfaces;
 using Microsoft.EntityFrameworkCore;
 
@@ -26,9 +27,10 @@ public class CompanyRepository(ApplicationDBContext applicationDBContext) : ICom
         return companyModel;
     }
 
-    public async Task<List<Models.Company>> GetAllAsync()
+    public async Task<List<Models.Company>> GetAllAsync(QueryObject query)
     {
-        return await _context.Companies.Include(c => c.Departments).ToListAsync();
+        var skipNumber = (query.PageNumber - 1) * query.PageSize;
+        return await _context.Companies.Skip(skipNumber).Take(query.PageSize).Include(c => c.Departments).ToListAsync();
     }
 
     public async Task<Models.Company?> GetByIdAsync(int id)

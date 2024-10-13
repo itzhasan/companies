@@ -1,5 +1,6 @@
 using Company.Data;
 using Company.Dtos.Department;
+using Company.Helpers;
 using Company.Interfaces;
 using Company.Models;
 using Microsoft.EntityFrameworkCore;
@@ -33,9 +34,10 @@ public class DepartmentRepository(ApplicationDBContext context) : IDepartmentRep
         return _context.Departments.AnyAsync(s => s.Id == id);
     }
 
-    public async Task<List<Department>> GetAllAsync()
+    public async Task<List<Department>> GetAllAsync(QueryObject query)
     {
-        return await _context.Departments.Include(c => c.Employees).ToListAsync();
+        var skipNumber = (query.PageNumber - 1) * query.PageSize;
+        return await _context.Departments.Skip(skipNumber).Take(query.PageSize).Include(c => c.Employees).ToListAsync();
     }
 
     public async Task<Department?> GetByIdAsync(int id)

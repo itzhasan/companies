@@ -1,4 +1,5 @@
 using Company.Dtos.Company;
+using Company.Helpers;
 using Company.Interfaces;
 using Company.Mappers;
 using Microsoft.AspNetCore.Mvc;
@@ -12,9 +13,9 @@ public class CompanyController(ICompanyRepository companyRepository) : Controlle
     private readonly ICompanyRepository _companyRepo = companyRepository;
 
     [HttpGet]
-    public async Task<IActionResult> GetAll()
+    public async Task<IActionResult> GetAll([FromQuery] QueryObject query)
     {
-        var company = await _companyRepo.GetAllAsync();
+        var company = await _companyRepo.GetAllAsync(query);
         var companyDto = company.Select(s => s.ToCompanyDto());
         return Ok(company);
     }

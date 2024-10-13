@@ -1,5 +1,6 @@
 using Company.Data;
 using Company.Dtos.Employee;
+using Company.Helpers;
 using Company.Interfaces;
 using Company.Models;
 using Microsoft.EntityFrameworkCore;
@@ -27,9 +28,10 @@ public class EmployeeRepository(ApplicationDBContext context) : IEmployeeReposit
         return employModel;
     }
 
-    public async Task<List<Employee>> GetAllAsync()
+    public async Task<List<Employee>> GetAllAsync(QueryObject query)
     {
-        return await _context.Employees.ToListAsync();
+        var skipNumber = (query.PageNumber - 1) * query.PageSize;
+        return await _context.Employees.Skip(skipNumber).Take(query.PageSize).ToListAsync();
     }
 
     public async Task<Employee?> GetByIdAsync(int id)

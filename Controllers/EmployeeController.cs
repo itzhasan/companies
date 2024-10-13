@@ -1,5 +1,6 @@
 using Company.Dtos.Employee;
 using Company.Dtos.TransferEmployDto;
+using Company.Helpers;
 using Company.Interfaces;
 using Company.Mappers;
 using Microsoft.AspNetCore.Mvc;
@@ -15,9 +16,9 @@ public class EmployeeController(IEmployeeRepository employeeRepo, IDepartmentRep
     private readonly ITransferEmployeeService _transferEmployeeService = transferEmployService;
 
     [HttpGet]
-    public async Task<IActionResult> GetAll()//add paginating
+    public async Task<IActionResult> GetAll([FromQuery] QueryObject query)//add paginating
     {
-        var employs = await _employeeRepo.GetAllAsync();
+        var employs = await _employeeRepo.GetAllAsync(query);
         var employDto = employs.Select(s => s.ToEmployeeDto());
         return Ok(employs);
     }
