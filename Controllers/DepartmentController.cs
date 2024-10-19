@@ -33,6 +33,19 @@ public class DepartmentController(IDepartmentRepository departmentRepo, ICompany
         return Ok(department.ToDepartmentDto());
     }
 
+    [HttpGet("company/{id:int}")]
+    public async Task<IActionResult> GetByCompanyId([FromRoute] int id)
+    {
+        var departments = await _departmentRepo.GetByCompanyId(id);
+        if (departments == null)
+        {
+            return NotFound();
+        }
+        var departmentDto = departments.Select(s => s.ToDepartmentDto());
+        return Ok(departmentDto);
+    }
+
+
     [HttpPost("{companyId:int}")]
     public async Task<IActionResult> Create([FromRoute] int companyId, CreateDepartmentRequestDto departmentDto)
     {

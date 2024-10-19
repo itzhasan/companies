@@ -1,7 +1,9 @@
+using Company.Contracts;
 using Company.Data;
 using Company.Dtos.Company;
 using Company.Helpers;
 using Company.Interfaces;
+using Company.Models;
 using Microsoft.EntityFrameworkCore;
 
 namespace Company.Repository;
@@ -29,19 +31,22 @@ public class CompanyRepository(ApplicationDBContext applicationDBContext) : ICom
         return companyModel;
     }
 
-    public async Task<List<Models.Company>> GetAllAsync()
-    {            
-        return await _context.Companies.Include(c => c.Departments).ToListAsync();
+    public async Task<PaginatedResponse<Models.Company>> GetAllAsync(CompanyQueryDto companyQueryDto)
+    {
+        IQueryable<Company.Models.Company> query = _context.Companies.Include(c => c.Departments);
+
+        return await PaginatedResponse<Models.Company>.CreateAsync(query, companyQueryDto.CurrentPage, companyQueryDto.PageSize);
     }
+
 
     public async Task<Models.Company?> GetByIdAsync(int id)
     {
         return await _context.Companies.Include(c => c.Departments).FirstOrDefaultAsync(i => i.Id == id);
     }
 
-    public Task<bool> CompanyExists(int id)
+    public async Task<bool> CompanyExists(int id)
     {
-        return _context.Companies.AnyAsync(s => s.Id == id);
+        return await _context.Companies.AnyAsync(s => s.Id == id);
     }
 
     public async Task<Models.Company?> UpdateAsync(int id, UpdateCompanyRequestDto companyDto)

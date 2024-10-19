@@ -12,6 +12,13 @@ public class CompanyController(ICompanyRepository companyRepository) : Controlle
 {
     private readonly ICompanyRepository _companyRepo = companyRepository;
 
+    [HttpGet]
+    public async Task<IActionResult> GetAll([FromQuery] CompanyQueryDto query)
+    {
+        var company = await _companyRepo.GetAllAsync(query);
+        return Ok(company);
+    }
+
     [HttpGet("{id:int}")]
     public async Task<IActionResult> GetById([FromRoute] int id)
     {

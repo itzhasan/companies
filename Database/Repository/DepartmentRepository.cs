@@ -40,6 +40,14 @@ public class DepartmentRepository(ApplicationDBContext context) : IDepartmentRep
         return await _context.Departments.Skip(skipNumber).Take(query.PageSize).Include(c => c.Employees).ToListAsync();
     }
 
+    public async Task<List<Department>> GetByCompanyId(int id)
+    {
+        return await _context.Departments
+            .Include(c => c.Employees)
+            .Where(d => d.CompanyId == id)
+            .ToListAsync();
+    }
+
     public async Task<Department?> GetByIdAsync(int id)
     {
         return await _context.Departments.Include(c => c.Employees).FirstOrDefaultAsync(i => i.Id == id);
