@@ -5,9 +5,11 @@ using Company.Interfaces;
 using Microsoft.EntityFrameworkCore;
 
 namespace Company.Repository;
+
 public class CompanyRepository(ApplicationDBContext applicationDBContext) : ICompanyRepository
 {
     private readonly ApplicationDBContext _context = applicationDBContext;
+
     public async Task<Models.Company> CreateAsync(Models.Company companyModel)
     {
         await _context.Companies.AddAsync(companyModel);
@@ -15,7 +17,7 @@ public class CompanyRepository(ApplicationDBContext applicationDBContext) : ICom
         return companyModel;
     }
 
-    public async Task<Models.Company?> DeleteAsync(int id)
+    public async Task<Company.Models.Company?> DeleteAsync(int id)
     {
         var companyModel = await _context.Companies.FirstOrDefaultAsync(x => x.Id == id);
         if (companyModel == null)
@@ -27,10 +29,9 @@ public class CompanyRepository(ApplicationDBContext applicationDBContext) : ICom
         return companyModel;
     }
 
-    public async Task<List<Models.Company>> GetAllAsync(QueryObject query)
-    {
-        var skipNumber = (query.PageNumber - 1) * query.PageSize;
-        return await _context.Companies.Skip(skipNumber).Take(query.PageSize).Include(c => c.Departments).ToListAsync();
+    public async Task<List<Models.Company>> GetAllAsync()
+    {            
+        return await _context.Companies.Include(c => c.Departments).ToListAsync();
     }
 
     public async Task<Models.Company?> GetByIdAsync(int id)

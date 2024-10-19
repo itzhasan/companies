@@ -12,14 +12,6 @@ public class CompanyController(ICompanyRepository companyRepository) : Controlle
 {
     private readonly ICompanyRepository _companyRepo = companyRepository;
 
-    [HttpGet]
-    public async Task<IActionResult> GetAll([FromQuery] QueryObject query)
-    {
-        var company = await _companyRepo.GetAllAsync(query);
-        var companyDto = company.Select(s => s.ToCompanyDto());
-        return Ok(company);
-    }
-
     [HttpGet("{id:int}")]
     public async Task<IActionResult> GetById([FromRoute] int id)
     {
@@ -53,7 +45,7 @@ public class CompanyController(ICompanyRepository companyRepository) : Controlle
 
     [HttpDelete]
     [Route("{id:int}")]
-    public async Task<IActionResult> Delete([FromRoute] int id)
+    public async Task<IActionResult> Delete(int id)
     {
         var companyModel = await _companyRepo.DeleteAsync(id);
         if (companyModel == null)

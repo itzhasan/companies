@@ -26,9 +26,7 @@ public class TransferDepartmentService(ApplicationDBContext context) : ITransfer
             throw new ArgumentException($"Target Company with Id {transferDepartmentDto.TargetCompanyId} not found.");
         }
 
-        company.Departments.Remove(department);
-
-        targetCompany.Departments.Add(department);
+        department.CompanyId = transferDepartmentDto.TargetCompanyId;
 
         await _context.SaveChangesAsync();
     }

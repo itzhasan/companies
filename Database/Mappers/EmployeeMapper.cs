@@ -7,12 +7,12 @@ public static class EmployeeMapper //use record instead of class ( google class 
 {
     public static EmployeeDto ToEmployeeDto(this Employee employeeModel)
     {
-        return new EmployeeDto
-        {
-            Id = employeeModel.Id,
-            Name = employeeModel.Name,
-            Age = employeeModel.Age,
-        };
+        return new EmployeeDto(
+            employeeModel.Id,
+            employeeModel.DepartmentId,
+            employeeModel.Name,
+            employeeModel.Age
+        );
     }
 
     public static Employee ToEmployeeFormCreateDTO(this CreateEmployeeRequestDto employeeDto, int departmentId)

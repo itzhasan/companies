@@ -1,4 +1,5 @@
 using Company.Dtos.Department;
+using Company.Dtos.Employee;
 using Company.Models;
 
 namespace Company.Mappers;
@@ -7,13 +8,18 @@ public static class DepartmentMapper
     public static DepartmentDto ToDepartmentDto(this Department departmentModel)
     {
         return new DepartmentDto
-        {
-            Id = departmentModel.Id,
-            CompanyId = departmentModel.CompanyId,
-            Name = departmentModel.Name,
-            Type = departmentModel.Type,
-            Employees = departmentModel.Employees.Select(c => c.ToEmployeeDto()).ToList()
-        };
+        (
+            departmentModel.Id,
+            departmentModel.CompanyId,
+            departmentModel.Name,
+            departmentModel.Type,
+            departmentModel.Employees.Select( emp => new EmployeeDto(
+                emp.Id,
+                emp.DepartmentId,
+                emp.Name,
+                emp.Age
+            )).ToList()
+        );
 
     }
     public static Department ToDepartmentFormCreateDTO(this CreateDepartmentRequestDto departmentDto, int companyId)

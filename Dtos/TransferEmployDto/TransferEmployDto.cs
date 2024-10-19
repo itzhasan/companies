@@ -1,7 +1,7 @@
 namespace Company.Dtos.TransferEmployDto;
-public class TransferEmployeeDto
-{
-    public int DepartmentId { get; set; }
-    public int EmployeeId { get; set; }
-    public int TargetDepartmentId { get; set; }
-}
+
+public record TransferEmployeeDto(
+    int DepartmentId,
+    int EmployeeId ,
+    int TargetDepartmentId 
+);

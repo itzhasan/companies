@@ -26,9 +26,7 @@ namespace Company.Services;
                 throw new ArgumentException($"Target Department with Id {transferEmployeeDto.TargetDepartmentId} not found.");
             }
 
-            department.Employees.Remove(employee);
-
-            targetDepartment.Employees.Add(employee);
+            employee.DepartmentId = transferEmployeeDto.DepartmentId;
 
             await _context.SaveChangesAsync();
         }

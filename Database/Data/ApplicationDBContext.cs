@@ -2,6 +2,7 @@ using Company.Models;
 using Microsoft.EntityFrameworkCore;
 
 namespace Company.Data;
+
 public class ApplicationDBContext : DbContext
 {
     public ApplicationDBContext(DbContextOptions<ApplicationDBContext> dbContextOptions)
@@ -26,6 +27,8 @@ public class ApplicationDBContext : DbContext
             .HasMany(s => s.Employees)
             .WithOne(c => c.Department)
             .HasForeignKey(c => c.DepartmentId);
+
+        modelBuilder.Entity<Department>().HasIndex(u => u.Name).IsUnique();
 
     }
 }
