@@ -1,11 +1,13 @@
+using Company.Contracts;
+using Company.Dtos.Company;
 using Company.Dtos.Employee;
-using Company.Helpers;
 using Company.Models;
 
 namespace Company.Interfaces;
+
 public interface IEmployeeRepository
 {
-    Task<List<Employee>> GetAllAsync(QueryObject query);
+    Task<PaginatedResponse<Employee>> GetAllAsync(CompanyQueryDto companyQueryDto);
     Task<Employee?> GetByIdAsync(int id);
     Task<List<Employee>> GetByDepartmentId(int id);
     Task<Employee> CreateAsync(Employee employeeModel);

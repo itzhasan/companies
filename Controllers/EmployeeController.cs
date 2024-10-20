@@ -1,3 +1,4 @@
+using Company.Dtos.Company;
 using Company.Dtos.Employee;
 using Company.Dtos.TransferEmployDto;
 using Company.Helpers;
@@ -16,11 +17,10 @@ public class EmployeeController(IEmployeeRepository employeeRepo, IDepartmentRep
     private readonly ITransferEmployeeService _transferEmployeeService = transferEmployService;
 
     [HttpGet]
-    public async Task<IActionResult> GetAll([FromQuery] QueryObject query)//add paginating
+    public async Task<IActionResult> GetAll([FromQuery] CompanyQueryDto queryDto)//add paginating
     {
-        var employs = await _employeeRepo.GetAllAsync(query);
-        var employDto = employs.Select(s => s.ToEmployeeDto());
-        return Ok(employs);
+        var employees = await _employeeRepo.GetAllAsync(queryDto);
+        return Ok(employees);
     }
 
     [HttpGet("{id:int}")]
@@ -49,7 +49,7 @@ public class EmployeeController(IEmployeeRepository employeeRepo, IDepartmentRep
         var departmentDto = employees.Select(s => s.ToEmployeeDto());
         return Ok(departmentDto);
     }
-    
+
     [HttpPost("{departmentId:int}")]
     public async Task<IActionResult> Create(int departmentId, CreateEmployeeRequestDto employeeDto)
     {

@@ -1,3 +1,4 @@
+using Company.Dtos.Company;
 using Company.Dtos.Department;
 using Company.Dtos.TransferDepartmentDto;
 using Company.Helpers;
@@ -15,11 +16,10 @@ public class DepartmentController(IDepartmentRepository departmentRepo, ICompany
     private readonly ITransferDepartmentService _transfer = transferDepartment;
 
     [HttpGet]
-    public async Task<IActionResult> GetAll([FromQuery] QueryObject query)
+    public async Task<IActionResult> GetAll([FromQuery] CompanyQueryDto queryDto)
     {
-        var department = await _departmentRepo.GetAllAsync(query);
-        var departmentDto = department.Select(s => s.ToDepartmentDto());
-        return Ok(departmentDto);
+        var departments = await _departmentRepo.GetAllAsync(queryDto);
+        return Ok(departments);
     }
 
     [HttpGet("{id:int}")]

@@ -1,4 +1,6 @@
+using Company.Contracts;
 using Company.Data;
+using Company.Dtos.Company;
 using Company.Dtos.Department;
 using Company.Helpers;
 using Company.Interfaces;
@@ -34,10 +36,11 @@ public class DepartmentRepository(ApplicationDBContext context) : IDepartmentRep
         return _context.Departments.AnyAsync(s => s.Id == id);
     }
 
-    public async Task<List<Department>> GetAllAsync(QueryObject query)
+    public async Task<PaginatedResponse<Department>> GetAllAsync(CompanyQueryDto queryDto)
     {
-        var skipNumber = (query.PageNumber - 1) * query.PageSize;
-        return await _context.Departments.Skip(skipNumber).Take(query.PageSize).Include(c => c.Employees).ToListAsync();
+        IQueryable<Department> query = _context.Departments.Include(c => c.Employees);
+
+        return await PaginatedResponse<Department>.CreateAsync(query, queryDto.CurrentPage, queryDto.PageSize);
     }
 
     public async Task<List<Department>> GetByCompanyId(int id)

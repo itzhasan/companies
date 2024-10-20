@@ -1,8 +1,8 @@
 using Company.Contracts;
 using Company.Dtos.Company;
-using Company.Helpers;
 
 namespace Company.Interfaces;
+
 public interface ICompanyRepository
 {
     Task<PaginatedResponse<Company.Models.Company>> GetAllAsync(CompanyQueryDto companyQueryDto);
