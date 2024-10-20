@@ -34,6 +34,22 @@ public class EmployeeController(IEmployeeRepository employeeRepo, IDepartmentRep
         return Ok(employee.ToEmployeeDto());
     }
 
+    [HttpGet("department/{departmentId:int}")]
+    public async Task<IActionResult> GetByCompanyId([FromRoute] int departmentId)
+    {
+        if (!await _departmentRepo.DepartmentExists(departmentId))
+        {
+            return BadRequest("department not exist");
+        }
+        var employees = await _employeeRepo.GetByDepartmentId(departmentId);
+        if (employees == null)
+        {
+            return NotFound();
+        }
+        var departmentDto = employees.Select(s => s.ToEmployeeDto());
+        return Ok(departmentDto);
+    }
+    
     [HttpPost("{departmentId:int}")]
     public async Task<IActionResult> Create(int departmentId, CreateEmployeeRequestDto employeeDto)
     {
@@ -70,10 +86,10 @@ public class EmployeeController(IEmployeeRepository employeeRepo, IDepartmentRep
         return Ok("deleted");
     }
     [HttpPost]
-        [Route("transfer")]
-        public async Task<IActionResult> Transfer([FromBody] TransferEmployeeDto transferEmployeeDto)
-        {
-            await _transferEmployeeService.MoveEmployeeToAnotherDepartmentAsync(transferEmployeeDto);
-            return Ok("ok");
-        }
+    [Route("transfer")]
+    public async Task<IActionResult> Transfer([FromBody] TransferEmployeeDto transferEmployeeDto)
+    {
+        await _transferEmployeeService.MoveEmployeeToAnotherDepartmentAsync(transferEmployeeDto);
+        return Ok("ok");
+    }
 }

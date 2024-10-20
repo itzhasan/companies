@@ -33,10 +33,14 @@ public class DepartmentController(IDepartmentRepository departmentRepo, ICompany
         return Ok(department.ToDepartmentDto());
     }
 
-    [HttpGet("company/{id:int}")]
-    public async Task<IActionResult> GetByCompanyId([FromRoute] int id)
+    [HttpGet("company/{companyId:int}")]
+    public async Task<IActionResult> GetByCompanyId([FromRoute] int companyId)
     {
-        var departments = await _departmentRepo.GetByCompanyId(id);
+        if (!await _companyRepo.CompanyExists(companyId))
+        {
+            return BadRequest("company not exist");
+        }
+        var departments = await _departmentRepo.GetByCompanyId(companyId);
         if (departments == null)
         {
             return NotFound();

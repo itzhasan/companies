@@ -34,6 +34,13 @@ public class EmployeeRepository(ApplicationDBContext context) : IEmployeeReposit
         return await _context.Employees.Skip(skipNumber).Take(query.PageSize).ToListAsync();
     }
 
+    public async Task<List<Employee>> GetByDepartmentId(int id)
+    {
+        return await _context.Employees
+            .Where(d => d.DepartmentId == id)
+            .ToListAsync();
+    }
+
     public async Task<Employee?> GetByIdAsync(int id)
     {
         return await _context.Employees.FirstOrDefaultAsync(i => i.Id == id);
